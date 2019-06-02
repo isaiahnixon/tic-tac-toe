@@ -46,6 +46,8 @@ function Game() {
   let status;
   if (winner) {
     status = 'Winner: ' + winner
+  } else if (isTie(squares)) {
+    status = "Tie!"
   } else {
     status = 'Next player: ' + (xIsNext ? 'X' : 'O')
   }
@@ -151,6 +153,22 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+// Helper function to determine if the game is a tie.
+function isTie(squares) {
+  // Convert the squares to an array if it is an object
+  if (squares instanceof Object) {
+    squares = Object.values(squares)
+  }
+
+  // If squares is an array, check if it is full
+  if (Array.isArray(squares)) {
+    return !squares.includes(null)
+  }
+
+  // Unknown type
+  return false
 }
 
 // The final render call
