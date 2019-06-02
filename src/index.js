@@ -1,4 +1,5 @@
 import React, { useEffect, Fragment, createContext, useContext, useRef, useState } from 'react';
+import { FaUndo, FaRedo } from "react-icons/fa"
 import ReactDOM from 'react-dom';
 import './index.css';
 
@@ -16,14 +17,24 @@ function useReducerWithHistory(reducer, state) {
   // Set some state for the current index
   const [index, setIndex] = useState(0)
 
+  // Function to determin if undo is possible
+  function canUndo() {
+    return (index > 0)
+  }
+
   // Function to rewind index by 1
   function undo() {
-    setIndex(index > 0 ? index - 1 : index)
+    setIndex(canUndo() ? index - 1 : index)
+  }
+
+  // Function to determine if redo is possible
+  function canRedo() {
+    return (index < history.current.length - 1)
   }
 
   // Function to increase index by 1
   function redo() {
-    setIndex(index < history.current.length - 1 ? index + 1 : index)
+    setIndex(canRedo() ? index + 1 : index)
   }
 
   // Dispatcher that preserves history when calling the reducer
@@ -35,12 +46,12 @@ function useReducerWithHistory(reducer, state) {
   }
 
   // Return the current state, and the new functions
-  return [history.current[index], dispatch, undo, redo]
+  return [history.current[index], dispatch, canUndo, undo, canRedo, redo]
 }
 
 function Game() {
   // Create the reducer pattern for the state
-  const [state, dispatch, undo, redo] = useReducerWithHistory(
+  const [state, dispatch, canUndo, undo, canRedo, redo] = useReducerWithHistory(
     (state, action) => {
       switch (action.type) {
         case "SQUARE_CLICKED":
@@ -88,8 +99,8 @@ function Game() {
       </div>
       <div className="game-info">
         <div>{status}</div>
-        <button onClick={undo}>Undo</button>
-        <button onClick={redo}>Redo</button>
+        <button onClick={undo} disabled={!canUndo()}>Undo <FaUndo/></button>
+        <button onClick={redo} disabled={!canRedo()}>Redo <FaRedo/></button>
       </div>
     </div>
   );
