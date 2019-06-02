@@ -101,20 +101,24 @@ function Square(props) {
   const { state, dispatch } = useContext(gameContext)
 
   // Grab the neccesary values from the state
-  let { squares, stepNumber, xIsNext } = state
+  const { squares, stepNumber, xIsNext } = state
+
+  let squaresCopy = {...squares}
+  let stepNumberCopy = stepNumber
+  let xIsNextCopy = xIsNext
 
   // Function to handle all square clicks
   const handleClick = () => {
     // If nobody has won, and the square is not already set,
     // Updated the state
     if (!calculateWinner(squares) && !squares[props.boardId]) {
-      squares[props.boardId] = xIsNext ? 'X' : 'O'
-      stepNumber = stepNumber + 1
-      xIsNext = !xIsNext
+      squaresCopy[props.boardId] = xIsNext ? 'X' : 'O'
+      stepNumberCopy = stepNumber + 1
+      xIsNextCopy = !xIsNext
     }
 
     // Dispatch the new state.
-    dispatch({ type: 'SQUARE_CLICKED', squares: squares, stepNumber: stepNumber, xIsNext: xIsNext })
+    dispatch({ type: 'SQUARE_CLICKED', squares: squaresCopy, stepNumber: stepNumberCopy, xIsNext: xIsNextCopy })
   }
 
   // Render a button with the passed in properties,
