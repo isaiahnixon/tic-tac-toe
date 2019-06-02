@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, createContext, useContext, useReducer } from 'react';
+import React, { useEffect, Fragment, createContext, useContext, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
@@ -8,9 +8,39 @@ let gameState = null
 // Initialize a context for the game
 const gameContext = createContext()
 
+// Custom hook for adding history functions to a reducer pattern.
+function useReducerWithHistory(reducer, state) {
+  // Use a reference for persistent history
+  const history = useRef([state])
+
+  // Set some state for the current index
+  const [index, setIndex] = useState(0)
+
+  // Function to rewind index by 1
+  function undo() {
+    setIndex(index > 0 ? index - 1 : index)
+  }
+
+  // Function to increase index by 1
+  function redo() {
+    setIndex(index < history.current.length - 1 ? index + 1 : index)
+  }
+
+  // Dispatcher that preserves history when calling the reducer
+  function dispatch(action) {
+    const newState = reducer(history.current[index], action)
+    history.current = history.current.slice(0, index + 1)
+    history.current.push(newState)
+    setIndex(history.current.length - 1)
+  }
+
+  // Return the current state, and the new functions
+  return [history.current[index], dispatch, undo, redo]
+}
+
 function Game() {
-  // Create the reducer patter for the state
-  const [state, dispatch] = useReducer(
+  // Create the reducer pattern for the state
+  const [state, dispatch, undo, redo] = useReducerWithHistory(
     (state, action) => {
       switch (action.type) {
         case "SQUARE_CLICKED":
@@ -58,6 +88,8 @@ function Game() {
       </div>
       <div className="game-info">
         <div>{status}</div>
+        <button onClick={undo}>Undo</button>
+        <button onClick={redo}>Redo</button>
       </div>
     </div>
   );
