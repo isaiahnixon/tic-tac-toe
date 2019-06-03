@@ -117,15 +117,15 @@ function Square(props) {
   // Function to handle all square clicks
   const handleClick = () => {
     // If nobody has won, and the square is not already set,
-    // Updated the state
     if (!calculateWinner(squares) && !squares[props.boardId]) {
+      // Update the state
       squaresCopy[props.boardId] = xIsNext ? 'X' : 'O'
       stepNumberCopy = stepNumber + 1
       xIsNextCopy = !xIsNext
-    }
 
-    // Dispatch the new state.
-    dispatch({ type: 'SQUARE_CLICKED', squares: squaresCopy, stepNumber: stepNumberCopy, xIsNext: xIsNextCopy })
+      // Dispatch the new state.
+      dispatch({ type: 'SQUARE_CLICKED', squares: squaresCopy, stepNumber: stepNumberCopy, xIsNext: xIsNextCopy })
+    }
   }
 
   // Render a button with the passed in properties,
