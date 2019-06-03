@@ -56,14 +56,15 @@ function Game() {
   return (
     <div className="game">
       <div className="game-board">
+        <h1>Tic-Tac-Toe</h1>
         <gameContext.Provider value={context}>
           <Board />
         </gameContext.Provider>
-      </div>
-      <div className="game-info">
-        <div>{status}</div>
-        <button onClick={undo} disabled={!canUndo()}>Undo <FaUndo/></button>
-        <button onClick={redo} disabled={!canRedo()}>Redo <FaRedo/></button>
+        <div className="game-info">
+          <div>{status}</div>
+          <button onClick={undo} disabled={!canUndo()}>Undo <FaUndo/></button>
+          <button onClick={redo} disabled={!canRedo()}>Redo <FaRedo/></button>
+        </div>
       </div>
     </div>
   );
