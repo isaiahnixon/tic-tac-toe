@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment, createContext, useContext } from 'react';
-import { FaUndo, FaRedo } from "react-icons/fa"
+import { FaUndo, FaRedo, FaSync } from "react-icons/fa"
 import useReducerWithHistory from "./useReducerWithHistory"
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -12,7 +12,7 @@ const gameContext = createContext()
 
 function Game() {
   // Create the reducer pattern for the state
-  const [state, dispatch, canUndo, undo, canRedo, redo] = useReducerWithHistory(
+  const [state, dispatch, canUndo, undo, canRedo, redo, reset] = useReducerWithHistory(
     (state, action) => {
       switch (action.type) {
         case "SQUARE_CLICKED":
@@ -44,10 +44,13 @@ function Game() {
 
   // Calculate the status
   let status;
+  let complete = false;
   if (winner) {
     status = 'Winner: ' + winner
+    complete = true
   } else if (isTie(squares)) {
     status = "Tie!"
+    complete = true
   } else {
     status = 'Next player: ' + (xIsNext ? 'X' : 'O')
   }
@@ -62,8 +65,11 @@ function Game() {
         </gameContext.Provider>
         <div className="game-info">
           <div>{status}</div>
-          <button onClick={undo} disabled={!canUndo()}>Undo <FaUndo/></button>
-          <button onClick={redo} disabled={!canRedo()}>Redo <FaRedo/></button>
+          {complete ? <button onClick={reset}>Reset <FaSync/></button> 
+          : <Fragment>
+              <button onClick={undo} disabled={!canUndo()}>Undo <FaUndo/></button>
+              <button onClick={redo} disabled={!canRedo()}>Redo <FaRedo/></button>
+            </Fragment>}
         </div>
       </div>
     </div>

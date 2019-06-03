@@ -35,7 +35,13 @@ export default function useReducerWithHistory(reducer, state) {
       history.current.push(newState)
       setIndex(history.current.length - 1)
     }
+
+    // Function to reset the history to the start
+    function reset() {
+      history.current = history.current.slice(0, 1)
+      setIndex(0)
+    }
   
     // Return the current state, and the new functions
-    return [history.current[index], dispatch, canUndo, undo, canRedo, redo]
+    return [history.current[index], dispatch, canUndo, undo, canRedo, redo, reset]
   }
