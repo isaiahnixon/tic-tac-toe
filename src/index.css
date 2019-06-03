@@ -75,4 +75,9 @@ body {
   margin: 0.25em;
   padding: 0.25em;
 }
+
+.game-info button:disabled {
+  color: #737373;
+  background-color: #F5FBFF;
+}
   
