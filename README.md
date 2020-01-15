@@ -1,8 +1,6 @@
 # Tic-Tac-Toe
 
-## Purpose
-
-This is a pretty classic beggining project in a framework. The goal was to convert this to the Hooks API, which is done. Eventually, I would like to experiment with unit tests.
+The goal was to convert [Intro to React](https://reactjs.org/tutorial/tutorial.html) to the Hooks API. Eventually, I would like to experiment with unit tests.
 
 ## Getting Started
 
